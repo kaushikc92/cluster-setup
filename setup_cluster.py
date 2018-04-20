@@ -69,28 +69,31 @@ sched.disk_image = params.osImage
 
 for i in range(params.n):
     for j in range(params.nDB):
-        lan = request.LAN()
-        lan.best_effort = True
+        link = request.Link("link" + str(i) + str(j), "vlan")
+        link.link_multiplexing = True
+        link.best_effort = True
         node_iface = nodes[i].addInterface("eth" + str(j))
         db_iface = dbnodes[j].addInterface("eth" + str(i))
-        lan.addInterface(node_iface)
-        lan.addInterface(db_iface)
+        link.addInterface(node_iface)
+        link.addInterface(db_iface)
 
 for i in range(params.n):
-    lan = request.LAN()
-    lan.best_effort = True
+    link = request.Link("link" + str(i) + "sched", "vlan")
+    link.link_multiplexing = True
+    link.best_effort = True
     node_iface = nodes[i].addInterface("eth" + str(params.nDB))
     sched_iface = sched.addInterface("eth" + str(i))
-    lan.addInterface(node_iface)
-    lan.addInterface(sched_iface)
+    link.addInterface(node_iface)
+    link.addInterface(sched_iface)
     
 for i in range(params.nDB):
-    lan = request.LAN()
+    link = request.Link("link" + "sched" + str(i), "vlan")
+    link.link_multiplexing = True
     lan.best_effort = True
     db_iface = dbnodes[i].addInterface("eth" + str(params.n))
     sched_iface = sched.addInterface("eth" + str(params.n + i))
-    lan.addInterface(db_iface)
-    lan.addInterface(sched_iface)
+    link.addInterface(db_iface)
+    link.addInterface(sched_iface)
 
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec(request) 
