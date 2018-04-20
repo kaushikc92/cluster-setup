@@ -44,13 +44,6 @@ params = pc.bindParameters()
 if params.n < 2:
     pc.reportError(portal.ParameterError("You must choose at least 2 nodes"))
 
-# Create lans
-
-lan = request.LAN()    
-
-# Set best effort on the lan to make sure it maps.
-lan.best_effort = True
-
 nodes = []
 dbnodes = []
 
@@ -89,7 +82,7 @@ for i in range(params.n):
 for i in range(params.nDB):
     link = request.Link("link" + "sched" + str(i), "vlan")
     link.link_multiplexing = True
-    lan.best_effort = True
+    link.best_effort = True
     db_iface = dbnodes[i].addInterface("eth" + str(params.n))
     sched_iface = sched.addInterface("eth" + str(params.n + i))
     link.addInterface(db_iface)
